@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CSC 304 - Final Activity (Calculator)</title>
+	<link href="http://fonts.cdnfonts.com/css/ds-digital" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+	<style type="text/css">
+		body {
+			background-image: url('https://www.frebers.com/wp-content/uploads/2020/08/Vector-black-abstract-background-free-vector-download-01-scaled.jpg');
+			background-color: grey;
+			background-size: cover;
+		}
+
+		.keysDivision {
+			line-height: 40px;
+			width: 195px;
+			height: 270px;
+			margin: auto;
+			padding: 15px;
+			align-items: center;
+			background-color: grey;
+			border-radius: 3%;
+			box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.3);
+		}
+
+		button {
+			width: 45px;
+			height: 45px;
+			text-align: center;
+			font-weight: bolder;
+			border-radius: 10px;
+		}
+
+		button:hover {
+			filter: brightness(120%);
+		}
+
+		.emptyspace {
+			width: 35px;
+			height: 35px;
+			border: transparent;
+			background-color: transparent;
+		}
+
+		.numberButton {
+			background-color: ghostwhite;
+		}
+
+		.operationButton {
+			background-color: lightgrey;
+		}
+
+		input {
+			font-size: 14px;
+			font-weight: bold;
+			font-family: 'DS-Digital', sans-serif;
+			background-color: darkgrey;
+			width: 185px;
+		}
+
+		input:focus {
+			outline: none;
+		}
+
+		h2 {
+			font-family: 'Bebas Neue', cursive;
+			font-size: 28px;
+			letter-spacing: 3px;
+		}
+
+		h5 {
+			font-family: 'Poppins', sans-serif;
+		}
+	</style>
+</head>
+<h2 style="text-align: center; color: red">Simple Calculator</h2>
+<h5 style="text-align: center; color: orangered;">by Sanito Yapoyco</h2>
+
+
+	<body>
+		<div class="keysDivision" id="calculator" style="border:solid 1px">
+			<input type="text" name="expressionInput" id="expressionInput" value="0" style="height: 30px"
+				oninput="this.value = this.value.replace(/[^0-9.+/ *-]/g, '').replace(/(\..*)\./g, '$1')">
+			<button onclick="allClear()"
+				style="background-color: salmon; text-align: center; color: darkred;font-weight: bolder">AC</button>
+			<button onclick="backspace()"
+				style="background-color: salmon; text-align: center; color: darkred;;font-weight: bolder;">DEL</button>
+			<br />
+			<button class="numberButton" onclick="addToDisplay(this)">1</button>
+			<button class="numberButton" onclick="addToDisplay(this)">2</button>
+			<button class="numberButton" onclick="addToDisplay(this)">3</button>
+			<button class="operationButton" onclick="addOperation(this)" value="+">+</button>
+			<button class="numberButton" onclick="addToDisplay(this)">4</button>
+			<button class="numberButton" onclick="addToDisplay(this)">5</button>
+			<button class="numberButton" onclick="addToDisplay(this)">6</button>
+			<button class="operationButton" onclick="addOperation(this)" value="-">-</button>
+			<button class="numberButton" onclick="addToDisplay(this)">7</button>
+			<button class="numberButton" onclick="addToDisplay(this)">8</button>
+			<button class="numberButton" onclick="addToDisplay(this)">9</button>
+			<button class="operationButton" onclick="addOperation(this)" value="*">&times</button>
+			<button class="operationButton" onclick="plusMinus()">&plusmn</button>
+			<button class="numberButton" onclick="addToDisplay(this)">0</button>
+			<button onclick="solve()" style="background-color: #4285F4; color: white; font-size: 14px">=</button>
+			<button class="operationButton" onclick="addOperation(this)" value="/">&divide</button>
+		</div>
+	</body>
+
+	<script>
+		alert('Zoom 150% for better appearance')
+		var expressionArray = [];
+		let isError = false;
+		let bgMusic = new Audio('https://files.gospeljingle.com/uploads/music/2023/06/Shoti-Ldr-(Gospeljingle.com).mp3')
+
+
+		function addToDisplay(keyToDisplay) {
+			var audio = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_technology_studio_speaker_active_power_switch_click_003_68875.mp3');
+			audio.volume = 0.1;
+			audio.play();
+
+			if (expressionInput.value[expressionInput.value.length - 1] == 'y') {
+				expressionInput.value = '0';
+			}
+			if (expressionInput.value[expressionInput.value.length - 1] != ')') {
+				if (expressionInput.value == 0) {
+					expressionInput.value = keyToDisplay.innerText;
+				}
+				else {
+					expressionInput.value += keyToDisplay.innerText;
+				}
+			}
+
+		}
+
+		function addOperation(operationToDisplay) {
+			var audio = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_technology_studio_speaker_active_power_switch_click_003_68875.mp3');
+			audio.volume = 0.1;
+			audio.play();
+			if (expressionInput.value[expressionInput.value.length - 1] == 'y') {
+				expressionInput.value = '0';
+			}
+			let expressionArray = expressionInput.value;
+			if (expressionArray[expressionArray.length - 1] == '+' || expressionArray[expressionArray.length - 1] == '-' || expressionArray[expressionArray.length - 1] == '*' || expressionArray[expressionArray.length - 1] == '/') {
+				let changer = [];
+				for (let i = 0; i < expressionArray.length; i++) {
+					changer[i] = expressionArray[i];
+				}
+				changer[changer.length - 1] = operationToDisplay.value;
+				expressionArray = '';
+				for (let i = 0; i < changer.length; i++) {
+					expressionArray += changer[i];
+				}
+				expressionInput.value = expressionArray;
+			}
+			else {
+				expressionInput.value += operationToDisplay.value;
+			}
+		}
+
+		function solve() {
+			var audio = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_technology_studio_speaker_active_power_switch_click_003_68875.mp3');
+			audio.volume = 0.1;
+			audio.play();
+
+			if (expressionInput.value[0] == '0' && !isNaN(expressionInput.value[1])) {
+				expressionArray = [];
+				for (let i = 0; i < expressionInput.value.length; i++) {
+					expressionArray[i] = expressionInput.value[i];
+				}
+				expressionArray.shift();
+				for (let i = 0; i < expressionArray.length; i++) {
+					if (i == 0) {
+						expressionInput.value = expressionArray[i];
+					}
+					else {
+						expressionInput.value += expressionArray[i];
+					}
+				}
+			}
+			if (isNaN(expressionInput.value[expressionInput.value.length - 1]) && expressionInput.value[expressionInput.value.length - 1] != ')' && expressionInput[expressionInput.value.length - 1] != '.') {
+				var audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3');
+				audio.volume = 1.0
+				audio.play();
+
+				isError = true;
+				expressionInput.value = 'ERROR';
+				setTimeout(allClear, 1000);
+			}
+			else {
+				if (eval(expressionInput.value) % 1 == 0) {
+					expressionInput.value = eval(expressionInput.value);
+				}
+				else {
+					expressionInput.value = eval(expressionInput.value).toFixed(2);
+				}
+			}
+		}
+
+		function allClear() {
+			if (isError == false) {
+				var audio = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_technology_studio_speaker_active_power_switch_click_003_68875.mp3');
+				audio.volume = 0.1;
+				audio.play();
+			}
+			else {
+				isError = false;
+			}
+			expressionArray = [];
+			expressionInput.value = "0";
+		}
+
+		function plusMinus() {
+			var audio = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_technology_studio_speaker_active_power_switch_click_003_68875.mp3');
+			audio.volume = 0.1;
+			audio.play();
+			if (expressionInput.value != '0') {
+				if (expressionInput.value[0] == '-' && !isNaN(expressionInput.value[expressionInput.value.length - 1])) {
+					expressionArray = [];
+					for (let i = 0; i < expressionInput.value.length; i++) {
+						expressionArray[i] = expressionInput.value[i];
+					}
+					expressionArray.shift();
+					for (let i = 0; i < expressionArray.length; i++) {
+						if (i == 0) {
+							expressionInput.value = expressionArray[i];
+						}
+						else {
+							expressionInput.value += expressionArray[i];
+						}
+					}
+				}
+				else {
+					if (!isNaN(expressionInput.value[expressionInput.value.length - 1]) || expressionInput.value[expressionInput.value.length - 1] == ')') {
+						expressionArray = [];
+						for (let i = 0; i < expressionInput.value.length; i++) {
+							expressionArray[i] = expressionInput.value[i];
+						}
+						if (expressionArray[expressionArray.length - 1] == ')') {// negative to positive
+							for (let i = expressionArray.length - 1; i >= 0; i--) {
+								if (expressionArray[i] == '-' || expressionArray[i] == ')') {
+									expressionArray.splice(i, 1);
+								}
+								else if (expressionArray[i] == '(') {
+									expressionArray.splice(i, 1);
+									break;
+								}
+							}
+						}
+						else {
+							let theIndex = 0
+							for (let i = expressionArray.length - 1; i >= 0; i--) {
+								if (isNaN(expressionArray[i - 1]) || expressionArray[i - 1] == undefined) {
+									theIndex = i;
+									break;
+								}
+							}
+							expressionArray.splice(theIndex, 0, '-');
+							expressionArray.splice(theIndex, 0, '(');
+							expressionArray.push(')');
+						}
+						for (let i = 0; i < expressionArray.length; i++) {
+							if (i == 0) {
+								expressionInput.value = expressionArray[i];
+							}
+							else {
+								expressionInput.value += expressionArray[i];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		function backspace() {
+			var audio = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-61905/zapsplat_technology_studio_speaker_active_power_switch_click_003_68875.mp3');
+			audio.volume = 0.1;
+			audio.play();
+			if (expressionInput.value[expressionInput.value.length - 1] == 'y') {// if value of the input is Inifinity, the input value = 0
+				expressionInput.value = '0';
+			}
+			if (expressionInput.value[expressionInput.value.length - 1] == ')') {//if value is negated, then unnegate
+				let expressionArray = [];
+				for (let i = 0; i < expressionInput.value.length; i++) {
+					expressionArray[i] = expressionInput.value[i];
+				}
+				for (let i = expressionArray.length - 1; i >= 0; i--) {
+					if (expressionArray[i] == '-' || expressionArray[i] == ')') {
+						expressionArray.splice(i, 1);
+					}
+					else if (expressionArray[i] == '(') {
+						expressionArray.splice(i, 1);
+						break;
+					}
+				}
+				for (let i = 0; i < expressionArray.length; i++) {
+					if (i == 0) {
+						expressionInput.value = expressionArray[i];
+					}
+					else {
+						expressionInput.value += expressionArray[i];
+					}
+				}
+			}
+			else {
+				if (expressionInput.value.length - 1 > 0) {
+					expressionInput.value = expressionInput.value.substr(0, expressionInput.value.length - 1);
+				}
+				else {
+					expressionInput.value = '0';
+				}
+			}
+		}
+	</script>
+
+</html>
